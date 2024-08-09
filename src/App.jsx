@@ -71,7 +71,6 @@ function App() {
   };
 
   const handleDeleteNote = (index) => {
-    console.log("test" + " " + index);
     setNotes((curr) => curr.filter((note) => note.id !== index));
 
     toast.error("Note supprimée", {
@@ -124,7 +123,7 @@ function App() {
             />
           </form>
         </section>
-        <section className="grid h-full grid-flow-row grid-cols-3 col-span-1 gap-5 p-4 m-3 overflow-y-scroll border-2 border-gray-800 rounded-md">
+        <section className="flex flex-row flex-wrap items-stretch gap-5 p-4 m-3 overflow-y-scroll border-2 border-gray-800 rounded-md justify-evenly">
           {printNotes()}
         </section>
       </main>
