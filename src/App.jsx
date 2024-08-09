@@ -12,7 +12,13 @@ function App() {
       return <div className="text-4xl text-center">Aucune note</div>;
     } else {
       return Notes.map((note) => (
-        <Note key={note.id} title={note.title} text={note.text} />
+        <Note
+          key={note.id}
+          id={note.id}
+          title={note.title}
+          text={note.text}
+          handleDeleteNote={handleDeleteNote}
+        />
       ));
     }
   };
@@ -33,7 +39,7 @@ function App() {
     if (event.target.title.value === "" || event.target.text.value === "") {
       return toast.error("Vous devez remplir les champs", {
         position: "top-center",
-        autoClose: 1500,
+        autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -51,9 +57,10 @@ function App() {
       // Réinitialisation des champs du formulaire
       event.target.title.value = "";
       event.target.text.value = "";
+
       toast.success("Notes sauvegardées", {
         position: "top-right",
-        autoClose: 1500,
+        autoClose: 750,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -61,6 +68,21 @@ function App() {
         progress: undefined,
       });
     }
+  };
+
+  const handleDeleteNote = (index) => {
+    console.log("test" + " " + index);
+    setNotes((curr) => curr.filter((note) => note.id !== index));
+
+    toast.error("Note supprimée", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   useEffect(() => {
