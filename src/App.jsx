@@ -1,61 +1,45 @@
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Note from "./components/Note";
 
 function App() {
   const [Notes, setNotes] = useState([]);
   let newNote = {};
 
+  const printNotes = () => {
+    if (Notes.length === 0) {
+      return <div className="text-4xl text-center">Aucune note</div>;
+    } else {
+      return Notes.map((note) => (
+        <Note key={note.id} title={note.title} text={note.text} />
+      ));
+    }
+  };
+
   useEffect(() => {
     let savedNotes = JSON.parse(localStorage.getItem("notes"));
+
     if (savedNotes && savedNotes !== null && !savedNotes.length == 0) {
-      console.table(JSON.parse(localStorage.getItem("notes")));
       setNotes(savedNotes);
-      console.log("savednotes" + " " + console.table(Notes));
-      console.log("success");
     } else {
-      console.log("notes null");
-      // setNotes([]);
+      console.log("Pas de notes sauvegardées");
     }
   }, []);
-
-  // const loading = () => {
-  //   const savedNotes = localStorage.getItem("notes");
-  //   setNotes(savedNotes ? JSON.parse(savedNotes) : []);
-  // };
-
-  // // Enregistrement des notes dans la variable Notes
-  // useEffect(() => {
-  //   loading();
-  // }, []);
-
-  // // Mettre à jour le localStorage à chaque changement de Notes
-  // useEffect(() => {
-  //   localStorage.setItem("notes", JSON.stringify(Notes));
-  // }, [Notes]);
-
-  // // Gestion du formulaire de saisie
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-
-  //   const newNote = {
-  //     id: Math.random().toString(36).substring(7),
-  //     title: event.target.title.value,
-  //     text: event.target.text.value,
-  //   };
-
-  //   setNotes((prevNotes) => [...prevNotes, newNote]);
-
-  //   // Réinitialisation des champs du formulaire
-  //   event.target.title.value = "";
-  //   event.target.text.value = "";
-  // };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (event.target.title.value === "" || event.target.text.value === "") {
-      console.log("Vous devez remplir les champs");
-      return;
+      return toast.error("Vous devez remplir les champs", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } else {
       newNote = {
         id: Math.random().toString(36).substring(7),
@@ -67,16 +51,27 @@ function App() {
       // Réinitialisation des champs du formulaire
       event.target.title.value = "";
       event.target.text.value = "";
+      toast.success("Notes sauvegardées", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
   useEffect(() => {
     console.table(Notes);
     localStorage.setItem("notes", JSON.stringify(Notes));
+    console.log("mise à jour des notes");
   }, [Notes]);
 
   return (
     <>
+      <ToastContainer />
       <main className="grid w-full h-screen text-white grid-cols-[320px_1fr] grid-rows-[40px_1fr_40px] bg-gray-900">
         <header className="inset-0 col-span-2 p-2 font-bold theme-color">
           <h1 className="bold">NOTE APP</h1>
@@ -108,13 +103,7 @@ function App() {
           </form>
         </section>
         <section className="grid h-full grid-flow-row grid-cols-3 col-span-1 gap-5 p-4 m-3 overflow-y-scroll border-2 border-gray-800 rounded-md">
-          {Notes.length === 0 ? (
-            <div className="text-4xl text-center">Aucune note</div>
-          ) : (
-            Notes.map((note) => (
-              <Note key={note.id} title={note.title} text={note.text} />
-            ))
-          )}
+          {printNotes()}
         </section>
       </main>
     </>
