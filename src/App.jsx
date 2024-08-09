@@ -123,7 +123,7 @@ function App() {
             />
           </form>
         </section>
-        <section className="flex flex-row flex-wrap items-stretch gap-5 p-4 m-3 overflow-y-scroll border-2 border-gray-800 rounded-md justify-evenly">
+        <section className="flex flex-row flex-wrap content-between justify-center gap-5 p-4 m-3 overflow-y-scroll border-2 border-gray-800 rounded-md items-between">
           {printNotes()}
         </section>
       </main>
