@@ -23,20 +23,22 @@ function App() {
     }
   };
 
+  // Récupération des notes sauvegardées dans le localStorage
+
   useEffect(() => {
     let savedNotes = JSON.parse(localStorage.getItem("notes"));
 
     if (savedNotes && savedNotes !== null && !savedNotes.length == 0) {
       setNotes(savedNotes);
-    } else {
-      console.log("Pas de notes sauvegardées");
     }
   }, []);
 
+  // Gestion du formulaire de création de notes
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (event.target.title.value === "" || event.target.text.value === "") {
+      // Affichage d'un message d'erreur si les champs ne sont pas remplis
       return toast.error("Vous devez remplir les champs", {
         position: "top-center",
         autoClose: 1000,
@@ -48,16 +50,19 @@ function App() {
       });
     } else {
       newNote = {
+        // Création d'un identifiant unique pour chaque note
         id: Math.random().toString(36).substring(7),
         title: event.target.title.value,
         text: event.target.text.value,
       };
+      // Ajout de la note à la liste des notes
       setNotes((prevNotes) => [...prevNotes, newNote]);
 
       // Réinitialisation des champs du formulaire
       event.target.title.value = "";
       event.target.text.value = "";
 
+      // Affichage d'un message de succès lorsque la note est créée
       toast.success("Notes sauvegardées", {
         position: "top-right",
         autoClose: 750,
@@ -70,9 +75,12 @@ function App() {
     }
   };
 
+  // Gestion du bouton de suppression de notes
   const handleDeleteNote = (index) => {
+    // Suppression de la note à partir de l'indentifiant spécifié
     setNotes((curr) => curr.filter((note) => note.id !== index));
 
+    // Affichage d'un message lorsque la note est supprimée
     toast.error("Note supprimée", {
       position: "top-center",
       autoClose: 500,
@@ -84,10 +92,9 @@ function App() {
     });
   };
 
+  // Mise à jour des notes dans le localStorage lorsque les notes sont modifiées
   useEffect(() => {
-    console.table(Notes);
     localStorage.setItem("notes", JSON.stringify(Notes));
-    console.log("mise à jour des notes");
   }, [Notes]);
 
   return (
